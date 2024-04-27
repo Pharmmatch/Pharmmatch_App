@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "900354422243",
+    "project_id": "pharmmatch-edcef",
+    "storage_bucket": "pharmmatch-edcef.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:900354422243:android:26e0c6ba2dc149e39e1cd6",
+        "android_client_info": {
+          "package_name": "com.example.pharmmatch_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "900354422243-c17efmeli9up4o57qnlhd1bj4qdqnco4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDIH2AU0OkTm78g7J2QQrAZ_RkPBL1dHXU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "900354422243-c17efmeli9up4o57qnlhd1bj4qdqnco4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
