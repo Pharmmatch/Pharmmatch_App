@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "900354422243-4ua7gahuk9n2bgkp6h3ou1u2lgu0u2gs.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.pharmmatch_app",
+            "certificate_hash": "ca9c0027efe3e9b7c6144d0153d014b3783bc644"
+          }
+        },
+        {
           "client_id": "900354422243-c17efmeli9up4o57qnlhd1bj4qdqnco4.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -29,6 +37,13 @@
             {
               "client_id": "900354422243-c17efmeli9up4o57qnlhd1bj4qdqnco4.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "900354422243-9st2v2h6r72b98tq9flgmh7rrlda855b.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.pharmmatchApp"
+              }
             }
           ]
         }
