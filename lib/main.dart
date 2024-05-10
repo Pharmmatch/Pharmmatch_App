@@ -5,6 +5,7 @@ import 'package:pharmmatch_app/auth_gate.dart';
 import 'firebase_options.dart';
 
 import 'package:pharmmatch_app/screens/login_screen.dart';
+import 'package:pharmmatch_app/screens/termsofuse_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -24,7 +25,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       // home: const AuthGate(),
-      home: const LoginScreen(),
+      home: TermsofuseScreen(),
     );
   }
 }
