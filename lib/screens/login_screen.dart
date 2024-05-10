@@ -48,31 +48,29 @@ class _LoginScreenState extends State<LoginScreen> {
         onTap: () {
           FocusScope.of(context).unfocus();
         },
-        child: Stack(
-          children: [
-            Positioned(
-              top: 0,
-              right: 0,
-              left: 0,
-              child: Image.asset('assets/images/pharmmatch_logo.png'),
-            ),
-            // 팜매치 로고
-            Positioned(
-              top: 400,
-              child: Container(
-                padding: const EdgeInsets.all(5),
-                height: 310,
-                width: MediaQuery.of(context).size.width - 40,
-                margin: const EdgeInsets.symmetric(horizontal: 20.0),
-                decoration: BoxDecoration(
-                  color: Colors.grey[200],
+        child: Container(
+          child: Padding(
+            padding: EdgeInsets.all(10),
+            child: Column(
+              children: [
+                Positioned(
+                  top: 10,
+                  right: 0,
+                  left: 0,
+                  child: Image.asset(
+                    'assets/images/pharmmatch_logo.png',
+                    width: 250,
+                    height: 250,
+                  ),
                 ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Container(
-                      margin: const EdgeInsets.all(10.0),
-                      child: Form(
+                // 팜매치 로고
+                SizedBox(height: 10),
+                Positioned(
+                  top: 410,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Form(
                         key: _formKey,
                         child: Column(
                           children: [
@@ -147,8 +145,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                 _tryValidation();
                               },
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.white,
-                                foregroundColor: Colors.black,
+                                backgroundColor: Colors.blue,
+                                foregroundColor: Colors.white,
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(12),
                                 ),
@@ -161,51 +159,52 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                           ],
                         ),
-                      ),
-                    )
-                  ],
-                ),
-              ),
-            ),
-            // 텍스트 폼 필드 + 버튼
-            Positioned(
-              top: MediaQuery.of(context).size.height - 140,
-              right: 0,
-              left: 0,
-              child: Column(
-                children: [
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.black,
-                      foregroundColor: Colors.white,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      minimumSize: const Size(300, 50),
-                    ),
-                    onPressed: () => signInWithGoogle(),
-                    child: const Text('Signup with Google'),
+                      )
+                    ],
                   ),
-                  // 로그인 버튼
-                  const SizedBox(height: 10),
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.black,
-                      foregroundColor: Colors.white,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
+                ),
+                // 텍스트 폼 필드 + 버튼
+                SizedBox(height: 10),
+                Positioned(
+                  top: MediaQuery.of(context).size.height - 140,
+                  right: 0,
+                  left: 0,
+                  child: Column(
+                    children: [
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.black,
+                          foregroundColor: Colors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          minimumSize: const Size(300, 50),
+                        ),
+                        onPressed: () => signInWithGoogle(),
+                        child: const Text('Signup with Google'),
                       ),
-                      minimumSize: const Size(300, 50),
-                    ),
-                    onPressed: () {},
-                    child: const Text('Signup with Apple'),
-                  )
-                  // 회원가입 버튼
-                ],
-              ),
+                      // 로그인 버튼
+                      const SizedBox(height: 10),
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.black,
+                          foregroundColor: Colors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          minimumSize: const Size(300, 50),
+                        ),
+                        onPressed: () {},
+                        child: const Text('Signup with Apple'),
+                      )
+                      // 회원가입 버튼
+                    ],
+                  ),
+                ),
+                // 소셜 로그인 버튼
+              ],
             ),
-            // 소셜 로그인 버튼
-          ],
+          ),
         ),
       ),
     );
