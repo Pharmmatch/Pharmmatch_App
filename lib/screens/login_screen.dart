@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:pharmmatch_app/screens/signup_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -144,7 +145,11 @@ class _LoginScreenState extends State<LoginScreen> {
                             const SizedBox(height: 10),
                             ElevatedButton(
                               onPressed: () {
-                                _tryValidation();
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                      builder: (_) => const SignupScreen(),
+                                  ),
+                                );
                               },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Colors.white,
