@@ -5,6 +5,18 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Pharmmatch'),
+      ),
+      body: ,
+    );
   }
+}
+
+Widget drugContainer() {
+  return Container(
+    padding: EdgeInsets.all(5),
+
+  );
 }
