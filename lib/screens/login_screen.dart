@@ -126,7 +126,6 @@ class _LoginScreenState extends State<LoginScreen> {
                                     email: userEmail,
                                     password: userPassword,
                                   );
-                                      print("된다!!!");
                                       Navigator.of(context).push(
                                         MaterialPageRoute(
                                           builder: (_) => const HomeScreen(),
