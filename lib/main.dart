@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:pharmmatch_app/auth_gate.dart';
+import 'package:pharmmatch_app/screens/home_screen.dart';
+import 'package:pharmmatch_app/screens/signup_screen.dart';
 import 'firebase_options.dart';
 
 import 'package:pharmmatch_app/screens/login_screen.dart';
 
-void main() async {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
@@ -20,11 +22,16 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      title: 'Pharmmatch App',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      // home: const AuthGate(),
-      home: const LoginScreen(),
+      initialRoute: '/',
+      routes: {
+        '/': (context) => const HomeScreen(),
+        '/login': (context) => const LoginScreen(),
+        '/signup': (context) => const SignupScreen(),
+      },
     );
   }
 }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:pharmmatch_app/screens/signup_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -11,17 +11,9 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final _authentication = FirebaseAuth.instance;
   final _formKey = GlobalKey<FormState>();
   String userEmail = '';
   String userPassword = '';
-
-  void _tryValidation() {
-    final isValid = _formKey.currentState!.validate();
-    if (isValid) {
-      _formKey.currentState!.save();
-    }
-  }
 
   Future<UserCredential> signInWithGoogle() async {
     // Trigger the authentication flow
@@ -43,31 +35,25 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: GestureDetector(
-        onTap: () {
-          FocusScope.of(context).unfocus();
-        },
-        child: Container(
-          child: Padding(
-            padding: EdgeInsets.all(10),
-            child: Column(
-              children: [
-                Positioned(
-                  top: 10,
-                  right: 0,
-                  left: 0,
-                  child: Image.asset(
+    return GestureDetector(
+      onTap: () {
+        FocusScope.of(context).unfocus();
+      },
+      child: Scaffold(
+        body: SingleChildScrollView(
+          child: Container(
+            child: Padding(
+              padding: const EdgeInsets.all(10),
+              child: Column(
+                children: [
+                  Image.asset(
                     'assets/images/pharmmatch_logo.png',
-                    width: 250,
-                    height: 250,
+                    width: 200,
+                    height: 200,
                   ),
-                ),
-                // 팜매치 로고
-                SizedBox(height: 10),
-                Positioned(
-                  top: 410,
-                  child: Column(
+                  // 팜매치 로고
+                  const SizedBox(height: 10),
+                  Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Form(
@@ -86,9 +72,6 @@ class _LoginScreenState extends State<LoginScreen> {
                               onSaved: (value) {
                                 userEmail = value!;
                               },
-                              onChanged: (value) {
-                                userEmail = value;
-                              },
                               decoration: const InputDecoration(
                                 prefixIcon: Icon(
                                   Icons.account_circle,
@@ -97,7 +80,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 hintText: 'Email',
                               ),
                             ),
-                            const SizedBox(height: 8),
+                            const SizedBox(height: 10),
                             TextFormField(
                               obscureText: true,
                               key: const ValueKey(2),
@@ -110,9 +93,6 @@ class _LoginScreenState extends State<LoginScreen> {
                               onSaved: (value) {
                                 userPassword = value!;
                               },
-                              onChanged: (value) {
-                                userPassword = value;
-                              },
                               decoration: const InputDecoration(
                                 prefixIcon: Icon(
                                   Icons.lock,
@@ -121,10 +101,13 @@ class _LoginScreenState extends State<LoginScreen> {
                                 hintText: 'Password',
                               ),
                             ),
-                            const SizedBox(height: 10),
+                            const SizedBox(height: 20),
                             ElevatedButton(
-                              onPressed: () {
-                                _tryValidation();
+                              onPressed: () async {
+                                if (_formKey.currentState!.validate()) {
+                                  _formKey.currentState!.save();
+                                  try {} on FirebaseAuthException {}
+                                }
                               },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Colors.blue,
@@ -142,7 +125,11 @@ class _LoginScreenState extends State<LoginScreen> {
                             const SizedBox(height: 10),
                             ElevatedButton(
                               onPressed: () {
-                                _tryValidation();
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (_) => const SignupScreen(),
+                                  ),
+                                );
                               },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Colors.blue,
@@ -162,14 +149,9 @@ class _LoginScreenState extends State<LoginScreen> {
                       )
                     ],
                   ),
-                ),
-                // 텍스트 폼 필드 + 버튼
-                SizedBox(height: 10),
-                Positioned(
-                  top: MediaQuery.of(context).size.height - 140,
-                  right: 0,
-                  left: 0,
-                  child: Column(
+                  // 텍스트 폼 필드 + 버튼
+                  const SizedBox(height: 30),
+                  Column(
                     children: [
                       ElevatedButton(
                         style: ElevatedButton.styleFrom(
@@ -200,9 +182,9 @@ class _LoginScreenState extends State<LoginScreen> {
                       // 회원가입 버튼
                     ],
                   ),
-                ),
-                // 소셜 로그인 버튼
-              ],
+                  // 소셜 로그인 버튼
+                ],
+              ),
             ),
           ),
         ),
