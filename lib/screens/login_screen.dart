@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:pharmmatch_app/screens/home_screen.dart';
 import 'package:pharmmatch_app/screens/signup_screen.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -14,6 +15,13 @@ class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
   String userEmail = '';
   String userPassword = '';
+
+  void tryValidation() {
+    final isValid = _formKey.currentState!.validate();
+    if (isValid) {
+      _formKey.currentState!.save();
+    }
+  }
 
   Future<UserCredential> signInWithGoogle() async {
     // Trigger the authentication flow
@@ -69,6 +77,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                 }
                                 return null;
                               },
+                              onChanged: (value) {
+                                userEmail = value;
+                              },
                               onSaved: (value) {
                                 userEmail = value!;
                               },
@@ -90,6 +101,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                 }
                                 return null;
                               },
+                              onChanged: (value) {
+                                userEmail = value;
+                              },
                               onSaved: (value) {
                                 userPassword = value!;
                               },
@@ -104,9 +118,27 @@ class _LoginScreenState extends State<LoginScreen> {
                             const SizedBox(height: 20),
                             ElevatedButton(
                               onPressed: () async {
-                                if (_formKey.currentState!.validate()) {
-                                  _formKey.currentState!.save();
-                                  try {} on FirebaseAuthException {}
+                                tryValidation();
+
+                                try {
+                                  UserCredential userCredential =
+                                  await FirebaseAuth.instance.signInWithEmailAndPassword(
+                                    email: userEmail,
+                                    password: userPassword,
+                                  );
+                                      Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                          builder: (_) => const HomeScreen(),
+                                        ),
+                                      );
+                                } on FirebaseAuthException catch (e) {
+                                  if (e.code == 'user-not-found') {
+                                    print('등록되지 않은 이메일입니다');
+                                  } else if (e.code == 'wrong-password') {
+                                    print('비밀번호가 틀렸습니다');
+                                  } else {
+                                    print(e.code);
+                                  }
                                 }
                               },
                               style: ElevatedButton.styleFrom(
