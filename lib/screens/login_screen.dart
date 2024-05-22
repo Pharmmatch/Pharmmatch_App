@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:pharmmatch_app/screens/home_screen.dart';
 import 'package:pharmmatch_app/screens/signup_screen.dart';
 import 'package:pharmmatch_app/screens/termsofuse_screen.dart';
 
@@ -13,12 +13,11 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final _authentication = FirebaseAuth.instance;
   final _formKey = GlobalKey<FormState>();
   String userEmail = '';
   String userPassword = '';
 
-  void _tryValidation() {
+  void tryValidation() {
     final isValid = _formKey.currentState!.validate();
     if (isValid) {
       _formKey.currentState!.save();
@@ -45,36 +44,28 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: GestureDetector(
-        onTap: () {
-          FocusScope.of(context).unfocus();
-        },
-        child: Stack(
-          children: [
-            Positioned(
-              top: 0,
-              right: 0,
-              left: 0,
-              child: Image.asset('assets/images/pharmmatch_logo.png'),
-            ),
-            // 팜매치 로고
-            Positioned(
-              top: 400,
-              child: Container(
-                padding: const EdgeInsets.all(5),
-                height: 310,
-                width: MediaQuery.of(context).size.width - 40,
-                margin: const EdgeInsets.symmetric(horizontal: 20.0),
-                decoration: BoxDecoration(
-                  color: Colors.grey[200],
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Container(
-                      margin: const EdgeInsets.all(10.0),
-                      child: Form(
+    return GestureDetector(
+      onTap: () {
+        FocusScope.of(context).unfocus();
+      },
+      child: Scaffold(
+        body: SingleChildScrollView(
+          child: Container(
+            child: Padding(
+              padding: const EdgeInsets.all(10),
+              child: Column(
+                children: [
+                  Image.asset(
+                    'assets/images/pharmmatch_logo.png',
+                    width: 200,
+                    height: 200,
+                  ),
+                  // 팜매치 로고
+                  const SizedBox(height: 10),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Form(
                         key: _formKey,
                         child: Column(
                           children: [
@@ -87,11 +78,11 @@ class _LoginScreenState extends State<LoginScreen> {
                                 }
                                 return null;
                               },
-                              onSaved: (value) {
-                                userEmail = value!;
-                              },
                               onChanged: (value) {
                                 userEmail = value;
+                              },
+                              onSaved: (value) {
+                                userEmail = value!;
                               },
                               decoration: const InputDecoration(
                                 prefixIcon: Icon(
@@ -101,7 +92,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 hintText: 'Email',
                               ),
                             ),
-                            const SizedBox(height: 8),
+                            const SizedBox(height: 10),
                             TextFormField(
                               obscureText: true,
                               key: const ValueKey(2),
@@ -111,11 +102,11 @@ class _LoginScreenState extends State<LoginScreen> {
                                 }
                                 return null;
                               },
+                              onChanged: (value) {
+                                userEmail = value;
+                              },
                               onSaved: (value) {
                                 userPassword = value!;
-                              },
-                              onChanged: (value) {
-                                userPassword = value;
                               },
                               decoration: const InputDecoration(
                                 prefixIcon: Icon(
@@ -125,10 +116,31 @@ class _LoginScreenState extends State<LoginScreen> {
                                 hintText: 'Password',
                               ),
                             ),
-                            const SizedBox(height: 10),
+                            const SizedBox(height: 20),
                             ElevatedButton(
-                              onPressed: () {
-                                _tryValidation();
+                              onPressed: () async {
+                                tryValidation();
+
+                                try {
+                                  UserCredential userCredential =
+                                  await FirebaseAuth.instance.signInWithEmailAndPassword(
+                                    email: userEmail,
+                                    password: userPassword,
+                                  );
+                                      Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                          builder: (_) => const HomeScreen(),
+                                        ),
+                                      );
+                                } on FirebaseAuthException catch (e) {
+                                  if (e.code == 'user-not-found') {
+                                    print('등록되지 않은 이메일입니다');
+                                  } else if (e.code == 'wrong-password') {
+                                    print('비밀번호가 틀렸습니다');
+                                  } else {
+                                    print(e.code);
+                                  }
+                                }
                               },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Colors.blue,
@@ -153,8 +165,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                 );
                               },
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.white,
-                                foregroundColor: Colors.black,
+                                backgroundColor: Colors.blue,
+                                foregroundColor: Colors.white,
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(12),
                                 ),
@@ -167,51 +179,47 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                           ],
                         ),
-                      ),
-                    )
-                  ],
-                ),
-              ),
-            ),
-            // 텍스트 폼 필드 + 버튼
-            Positioned(
-              top: MediaQuery.of(context).size.height - 140,
-              right: 0,
-              left: 0,
-              child: Column(
-                children: [
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.black,
-                      foregroundColor: Colors.white,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      minimumSize: const Size(300, 50),
-                    ),
-                    onPressed: () => signInWithGoogle(),
-                    child: const Text('Signup with Google'),
+                      )
+                    ],
                   ),
-                  // 로그인 버튼
-                  const SizedBox(height: 10),
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.black,
-                      foregroundColor: Colors.white,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
+                  // 텍스트 폼 필드 + 버튼
+                  const SizedBox(height: 30),
+                  Column(
+                    children: [
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.black,
+                          foregroundColor: Colors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          minimumSize: const Size(300, 50),
+                        ),
+                        onPressed: () => signInWithGoogle(),
+                        child: const Text('Signup with Google'),
                       ),
-                      minimumSize: const Size(300, 50),
-                    ),
-                    onPressed: () {},
-                    child: const Text('Signup with Apple'),
-                  )
-                  // 회원가입 버튼
+                      // 로그인 버튼
+                      const SizedBox(height: 10),
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.black,
+                          foregroundColor: Colors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          minimumSize: const Size(300, 50),
+                        ),
+                        onPressed: () {},
+                        child: const Text('Signup with Apple'),
+                      )
+                      // 회원가입 버튼
+                    ],
+                  ),
+                  // 소셜 로그인 버튼
                 ],
               ),
             ),
-            // 소셜 로그인 버튼
-          ],
+          ),
         ),
       ),
     );
