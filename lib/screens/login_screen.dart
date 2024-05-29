@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:pharmmatch_app/screens/home_screen.dart';
 import 'package:pharmmatch_app/screens/signup_screen.dart';
+import 'package:pharmmatch_app/screens/termsofuse_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -121,7 +122,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                 );
                                 Navigator.of(context).push(
                                   MaterialPageRoute(
+
                                     builder: (_) => const HomeScreen(),
+
                                   ),
                                 );
                               } on FirebaseAuthException catch (e) {

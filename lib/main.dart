@@ -7,6 +7,7 @@ import 'package:pharmmatch_app/screens/signup_screen.dart';
 import 'firebase_options.dart';
 
 import 'package:pharmmatch_app/screens/login_screen.dart';
+import 'package:pharmmatch_app/screens/termsofuse_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -26,12 +27,14 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
+
       initialRoute: '/login',
       routes: {
         '/homescreen': (context) => const HomeScreen(),
         '/login': (context) => const LoginScreen(),
         '/signup': (context) => const SignupScreen(),
       },
+
     );
   }
 }
