@@ -5,6 +5,11 @@ class MyPageScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('마이페이지'),
+        centerTitle: true,
+      ),
+    );
   }
 }
