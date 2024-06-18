@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pharmmatch_app/Widgets/paged_drug_list_view.dart';
 import 'package:pharmmatch_app/models/drug_info.dart';
-import 'package:pharmmatch_app/repository/kor_drug_repository.dart';
 import 'package:pharmmatch_app/screens/mypage_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -12,13 +11,12 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  late final Future<List<DrugInfo>> _korDrug;
   String inputText = '';
   final searchTec = TextEditingController();
 
   @override
   void initState() {
-    _korDrug = KorDrugRepository.getDrugs();
+    // _korDrug = KorDrugRepository.getDrugs();
     super.initState();
   }
 
@@ -67,32 +65,18 @@ class _HomeScreenState extends State<HomeScreen> {
                         inputText = value;
                       });
                     },
-                    onChanged: (value) {
-                      setState(() {
-                        inputText = value;
-                      });
-                    },
+                    // onChanged: (value) {
+                    //   setState(() {
+                    //     inputText = value;
+                    //   });
+                    // },
                   ),
                 ),
                 const SizedBox(height: 10),
                 Expanded(
-                  child: FutureBuilder(
-                      future: _korDrug,
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return Container(); // or any other loading indicator
-                        } else if (snapshot.hasError) {
-                          return Text('Error: ${snapshot.error}');
-                        } else {
-                          final drugs = snapshot.data ?? [];
-                          return inputText.isEmpty
-                              ? Container()
-                              : PagedDrugListView(
-                                  inputText: inputText, drugs: drugs);
-                        }
-                      }),
-                ),
+                    child: inputText.isEmpty
+                        ? Container()
+                        : PagedDrugListView(inputText: inputText)),
               ],
             ),
           ),

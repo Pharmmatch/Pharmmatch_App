@@ -2,27 +2,28 @@ import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:pharmmatch_app/models/drug_info.dart';
 import 'package:pharmmatch_app/Widgets/drug_container.dart';
+import 'package:pharmmatch_app/const/api.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class PagedDrugListView extends StatefulWidget {
   const PagedDrugListView({
     required this.inputText,
-    required this.drugs,
     super.key,
   });
 
   final String inputText;
-  final List<DrugInfo> drugs;
 
   @override
   State<PagedDrugListView> createState() => _PagedDrugListViewState();
 }
 
 class _PagedDrugListViewState extends State<PagedDrugListView> {
-  late List<DrugInfo> _filteredDrugs = [];
-  static const _pageSize = 20;
-
   final PagingController<int, DrugInfo> _pagingController =
       PagingController(firstPageKey: 0);
+  late List<DrugInfo> _filteredDrugs = [];
+  static const _pageSize = 20;
+  bool _isLoading = false;
 
   @override
   void initState() {
@@ -48,11 +49,23 @@ class _PagedDrugListViewState extends State<PagedDrugListView> {
 
   Future<void> _filterDrugs(String searchQuery) async {
     setState(() {
-      _filteredDrugs = widget.drugs
-          .where((drug) => drug.drugName!.contains(searchQuery))
-          .toList();
-      _pagingController.itemList = _filteredDrugs;
+      _isLoading = true; // Start loading
     });
+    // searchQuery = Uri.decodeComponent(searchQuery);
+    final response = await http
+        .get(Uri.parse('$localUrl/search_kordrug?query=$searchQuery'));
+
+    if (response.statusCode == 200) {
+      final List<dynamic> jsonResponse = json.decode(response.body);
+      final List<DrugInfo> filteredDrugs =
+          jsonResponse.map((json) => DrugInfo.fromJson(json)).toList();
+
+      setState(() {
+        _filteredDrugs = filteredDrugs;
+        _pagingController.itemList = _filteredDrugs;
+        _isLoading = false;
+      });
+    }
   }
 
   Future<void> _fetchPage(int pageKey) async {
@@ -73,14 +86,16 @@ class _PagedDrugListViewState extends State<PagedDrugListView> {
 
   @override
   Widget build(BuildContext context) {
-    return PagedListView<int, DrugInfo>(
-      pagingController: _pagingController,
-      builderDelegate: PagedChildBuilderDelegate<DrugInfo>(
-        itemBuilder: (context, item, index) => Padding(
-          padding: const EdgeInsets.all(15),
-          child: DrugContainer(drug: item),
-        ),
-      ),
-    );
+    return _isLoading
+        ? const Center(child: CircularProgressIndicator())
+        : PagedListView<int, DrugInfo>(
+            pagingController: _pagingController,
+            builderDelegate: PagedChildBuilderDelegate<DrugInfo>(
+              itemBuilder: (context, item, index) => Padding(
+                padding: const EdgeInsets.all(15),
+                child: DrugContainer(drug: item),
+              ),
+            ),
+          );
   }
 }

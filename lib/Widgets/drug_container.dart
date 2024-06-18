@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pharmmatch_app/models/drug_info.dart';
+import 'package:pharmmatch_app/const/colors.dart';
+import 'package:pharmmatch_app/screens/match_screen.dart';
 
 class DrugContainer extends StatelessWidget {
   const DrugContainer({
@@ -27,13 +29,22 @@ class DrugContainer extends StatelessWidget {
             fontWeight: FontWeight.normal,
           ),
         ),
-        trailing: Container(
-          height: 30,
-          width: 30,
-          decoration: const BoxDecoration(
-            shape: BoxShape.circle,
-            color: Colors.green,
+        trailing: ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            minimumSize: const Size(50, 30),
+            foregroundColor: Colors.black,
+            backgroundColor: ORANGE_COLOR.withOpacity(0.5),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(15),
+            ),
           ),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => MatchPage(drug)),
+            );
+          },
+          child: const Text('선택'),
         ),
       ),
     );
