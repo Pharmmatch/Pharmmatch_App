@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:pharmmatch_app/const/colors.dart';
 import 'package:pharmmatch_app/models/drug_info.dart';
 import 'package:pharmmatch_app/const/api.dart';

@@ -61,9 +61,18 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
                     onSubmitted: (value) {
-                      setState(() {
-                        inputText = value;
-                      });
+                      if (value.length >= 2) {
+                        setState(() {
+                          inputText = value;
+                        });
+                      } else {
+                        // 두 글자 미만의 검색어에 대한 처리
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('검색어는 최소 두 글자 이상이어야 합니다.'),
+                          ),
+                        );
+                      }
                     },
                     // onChanged: (value) {
                     //   setState(() {
@@ -73,10 +82,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
                 const SizedBox(height: 10),
-                Expanded(
-                    child: inputText.isEmpty
-                        ? Container()
-                        : PagedDrugListView(inputText: inputText)),
+                Expanded(child: PagedDrugListView(inputText: inputText)),
               ],
             ),
           ),

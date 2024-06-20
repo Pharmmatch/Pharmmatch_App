@@ -21,7 +21,7 @@ class PagedDrugListView extends StatefulWidget {
 class _PagedDrugListViewState extends State<PagedDrugListView> {
   final PagingController<int, DrugInfo> _pagingController =
       PagingController(firstPageKey: 0);
-  late List<DrugInfo> _filteredDrugs = [];
+  List<DrugInfo> _filteredDrugs = [];
   static const _pageSize = 20;
   bool _isLoading = false;
 
@@ -49,33 +49,49 @@ class _PagedDrugListViewState extends State<PagedDrugListView> {
 
   Future<void> _filterDrugs(String searchQuery) async {
     setState(() {
-      _isLoading = true; // Start loading
+      _isLoading = true;
+      _filteredDrugs = [];
+      _pagingController.itemList = [];
     });
-    // searchQuery = Uri.decodeComponent(searchQuery);
-    final response = await http
-        .get(Uri.parse('$localUrl/search_kordrug?query=$searchQuery'));
 
-    if (response.statusCode == 200) {
-      final List<dynamic> jsonResponse = json.decode(response.body);
-      final List<DrugInfo> filteredDrugs =
-          jsonResponse.map((json) => DrugInfo.fromJson(json)).toList();
-
+    if (searchQuery.isEmpty) {
       setState(() {
-        _filteredDrugs = filteredDrugs;
-        _pagingController.itemList = _filteredDrugs;
         _isLoading = false;
       });
+    } else {
+      final response = await http
+          .get(Uri.parse('$localUrl/search_kordrug?query=$searchQuery'));
+
+      if (response.statusCode == 200) {
+        final List<dynamic> jsonResponse = json.decode(response.body);
+        final List<DrugInfo> filteredDrugs =
+            jsonResponse.map((json) => DrugInfo.fromJson(json)).toList();
+
+        setState(() {
+          _filteredDrugs = filteredDrugs;
+          _isLoading = false;
+        });
+
+        _pagingController.refresh();
+      } else {
+        setState(() {
+          _isLoading = false;
+        });
+      }
     }
   }
 
   Future<void> _fetchPage(int pageKey) async {
     try {
-      final nextPage = pageKey + 1;
       final startIndex = pageKey * _pageSize;
       final endIndex = startIndex + _pageSize;
       if (startIndex < _filteredDrugs.length) {
-        final drugsForPage = _filteredDrugs.sublist(startIndex, endIndex);
-        _pagingController.appendPage(drugsForPage, nextPage);
+        final drugsForPage = _filteredDrugs.sublist(
+            startIndex,
+            endIndex > _filteredDrugs.length
+                ? _filteredDrugs.length
+                : endIndex);
+        _pagingController.appendPage(drugsForPage, pageKey + 1);
       } else {
         _pagingController.appendLastPage([]);
       }
